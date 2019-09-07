@@ -1,16 +1,25 @@
 {
-  "name": "SeoaPlayer",
+  "name": "seoaplayer-client",
   "version": "0.0.1",
   "main": "index.js",
   "repository": "https://github.com/seoaapp/SeoaPlayer.git",
   "author": "Seoa <ttakkku@outlook.com>",
+  "scripts": {
+    "start": "electron ."
+  },
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1"
+  },
+  "dependencies": {
+    "discord-rpc": "^3.0.2",
+    "electron": "^6.0.7",
+    "electron-builder": "^21.2.0",
+    "superagent": "^5.1.0"
   }
 }
