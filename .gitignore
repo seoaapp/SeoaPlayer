@@ -5,3 +5,6 @@ yarn.lock
 
 # Mac
 **/.DS_Store
+
+DB/
+res/

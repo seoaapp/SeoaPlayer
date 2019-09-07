@@ -1,16 +1,29 @@
 {
-  "name": "SeoaPlayer",
-  "version": "0.0.1",
+  "name": "seoa-player-api",
+  "version": "0.1.0",
   "main": "index.js",
   "repository": "https://github.com/seoaapp/SeoaPlayer.git",
   "author": "Seoa <ttakkku@outlook.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.2.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "superagent": "^5.1.0"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "cors": "^2.8.5",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
+    "uuid": "^3.3.3"
   }
 }
