@@ -32,57 +32,71 @@ const app = express()
 app.use(cors())
 app.use(fileUpload())
 
-app.get('/auth/:proc/:param1/:param2', (req, res) => {
-  switch (req.params.proc) {
-    case 'join':
-      authHost.userList.add(req.params.param1, req.params.param2, (err) => {
-        if (err) res.status(403).send(err)
-        else res.sendStatus(200)
-      })
-      break
-
-    case 'signin':
-      authHost.sessions.getSession(req.params.param1, req.params.param2, (err, sessionId) => {
-        if (err) res.status(403).send(err)
-        else res.send({ accountId: req.params.param1, sessionId: sessionId })
-      })
-      break
-
-    case 'check':
-      authHost.sessions.checkSession(req.params.param1, req.params.param2, (err) => {
-        if (err) res.status(403).send(err)
-        else res.sendStatus(200)
-      })
-      break
-
-    default:
-      res.sendStatus(404)
-      break
-  }
-})
-
-app.post('/res/upload/:sessionId', (req, res) => {
-  resHost.up(req.params.sessionId, req.files, (err) => {
-    if (err) res.status(403).send(err)
-    else res.sendStatus(200)
-  })
-})
-
-app.get('/res/upload/:sessionId', (req, res) => {
-  ejs.renderFile('./page/upload.ejs', { PORT: PORT, sessionId: req.params.sessionId }, (err, str) => {
-    if (err) res.status(401).send(err)
-    else res.send(str)
-  })
-})
-
-app.get('/res/download/:sessionId/:filename', (req, res) => {
-  resHost.down(req.params.sessionId, req.params.filename, res)
-})
-
-app.get('/api/heartbeat', (req, res) => {
-  res.sendStatus(200)
-})
+websiteServer()
+apiServer()
 
 app.listen(PORT, () => {
   console.log(chalk.blue('Seoa Player Server is now on ') + chalk.blue.bold('http://localhost:') + chalk.yellow.bold(PORT) + chalk.blue.bold('/'))
 })
+
+function websiteServer () {
+  app.get('/', (_req, res) => {
+    res.redirect('/login')
+  })
+
+  app.get('/login', (_req, res) => {
+    ejs.renderFile('./page/login.ejs', (err, str) => {
+      if (err) res.status(501).send(err)
+      else res.send(str)
+    })
+  })
+}
+
+function apiServer () {
+  app.get('/api/:proc/:param1/:param2', (req, res) => {
+    switch (req.params.proc) {
+      case 'signup':
+        authHost.userList.add(decodeURI(req.params.param1), decodeURI(req.params.param2), (err) => {
+          if (err) res.status(403).send(err)
+          else res.sendStatus(200)
+        })
+        break
+
+      case 'login':
+        authHost.sessions.getSession(decodeURI(req.params.param1), decodeURI(req.params.param2), (err, sessionId) => {
+          if (err) res.status(403).send(err)
+          else res.send({ accountId: decodeURI(req.params.param1), sessionId: sessionId })
+        })
+        break
+
+      case 'check':
+        authHost.sessions.checkSession(decodeURI(req.params.param1), decodeURI(req.params.param2), (err) => {
+          if (err) res.status(403).send(err)
+          else res.sendStatus(200)
+        })
+        break
+    }
+  })
+
+  app.post('/api/upload/:sessionId', (req, res) => {
+    resHost.up(req.params.sessionId, req.files, (err) => {
+      if (err) res.status(403).send(err)
+      else res.sendStatus(200)
+    })
+  })
+
+  app.get('/api/upload/:sessionId', (req, res) => {
+    ejs.renderFile('./page/upload.ejs', { PORT: PORT, sessionId: req.params.sessionId }, (err, str) => {
+      if (err) res.status(401).send(err)
+      else res.send(str)
+    })
+  })
+
+  app.get('/api/download/:sessionId/:filename', (req, res) => {
+    resHost.down(req.params.sessionId, req.params.filename, res)
+  })
+
+  app.get('/api/heartbeat', (req, res) => {
+    res.sendStatus(200)
+  })
+}
