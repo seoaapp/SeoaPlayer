@@ -66,6 +66,8 @@
               alert('잘했어! SessionID: ' + JSON.parse(xhr.responseText).sessionId)
             } else if (xhr.status == 403) {
               alert('틀렸어!')
+            } else if (xhr.status == 404) {
+              alert('관리자에게 문의 바랍니다.')
             } else {
               alert('서버 쥬금...')
             }
